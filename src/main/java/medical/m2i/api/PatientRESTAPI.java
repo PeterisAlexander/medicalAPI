@@ -31,6 +31,23 @@ public class PatientRESTAPI {
         return em.find(PatientEntity.class, id);
     }
 
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/delete/{id}")
+    public void deleteOne( @PathParam("id") int id) {
+        PatientEntity p = em.find(PatientEntity.class, id);
+        EntityTransaction tx = em.getTransaction();
+        // Début des modifications
+        try {
+            tx.begin();
+            em.remove(p);
+            tx.commit();
+            System.out.println("id du patient suppriler : " + id);
+        } catch (Exception e) {
+            tx.rollback();
+        } finally {}
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("")

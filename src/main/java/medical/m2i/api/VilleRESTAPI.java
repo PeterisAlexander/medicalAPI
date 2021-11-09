@@ -32,10 +32,27 @@ public class VilleRESTAPI {
         return em.find(VilleEntity.class, id);
     }
 
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/delete/{id}")
+    public void deleteOne(@PathParam("id") int id) {
+        VilleEntity v = em.find(VilleEntity.class, id);
+        EntityTransaction tx = em.getTransaction();
+        // Début des modifications
+        try {
+            tx.begin();
+            em.remove(v);
+            tx.commit();
+            System.out.println("id de la ville supprimer : " + id);
+        } catch (Exception e) {
+            tx.rollback();
+        } finally {}
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("")
-    public void addPatient( VilleEntity v) {
+    public void addVille( VilleEntity v) {
         EntityTransaction tx = em.getTransaction();
         // Début des modifications
         try {
